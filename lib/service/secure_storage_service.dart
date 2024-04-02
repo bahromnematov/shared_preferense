@@ -1,0 +1,3 @@
+class SecureService {
+  static storeApiKey() {}
+}
