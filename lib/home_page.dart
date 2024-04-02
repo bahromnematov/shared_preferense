@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferense/model/user_model.dart';
 import 'package:shared_preferense/second_page.dart';
+import 'package:shared_preferense/service/secure_storage_service.dart';
 import 'package:shared_preferense/service/shared_preference.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,7 +16,7 @@ class _HomePageState extends State<HomePage> {
 
   name() {
     String name = nameController.text.toString().trim();
-    PrefsService.storeName(name);
+    SecureService.storeApiKey(name);
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
       return SecondPage();
     }));

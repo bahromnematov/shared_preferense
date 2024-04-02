@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferense/service/secure_storage_service.dart';
 import 'package:shared_preferense/service/shared_preference.dart';
 
 class SecondPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class _SecondPageState extends State<SecondPage> {
   String a = "";
 
   void loadAppName() {
-    PrefsService.loadName().then((value) => {
+    SecureService.loadApiKey().then((value) => {
           setState(() {
             a = value!;
           })
