@@ -12,15 +12,14 @@ class HttpService {
 
   // HTTPs Apis //
 
-  static String API_LIST = "/posts"; //Get
+  static String API_LIST = "/photos"; //Get
   static String API_CREATE = "/posts"; //Post
   static String API_UPDATE = "/posts/"; //id  //PUT
   static String API_DELETE = "/posts/"; //id  //Delete
 
-
   static Future<String?> GET(String api, Map<String, String> params) async {
     var url = Uri.https(BASE, api, params);
-    var response = await get(url,headers: headers);
+    var response = await get(url, headers: headers);
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -60,24 +59,33 @@ class HttpService {
     return params;
   }
 
-  static Map<String, String> paramsCreate(Post post) {
-    Map<String, String> params = {};
-    params.addAll({
-      'userId': post.userId.toString(),
-      'title': post.title!,
-      'body': post.body!
-    });
-    return params;
-  }
+  // static Map<String, String> paramsCreate(Post post) {
+  //   Map<String, String> params = {};
+  //   params.addAll({
+  //     'userId': post.userId.toString(),
+  //     'title': post.title!,
+  //     'body': post.body!
+  //   });
+  //   return params;
+  // }
 
-  static Map<String, String> paramsUpdate(Post post) {
-    Map<String, String> params = {};
-    params.addAll({
-      'userId': post.userId.toString(),
-      'id': post.id.toString(),
-      'title': post.title!,
-      'body': post.body!
-    });
-    return params;
+  // static Map<String, String> paramsUpdate(Post post) {
+  //   Map<String, String> params = {};
+  //   params.addAll({
+  //     'userId': post.userId.toString(),
+  //     'id': post.id.toString(),
+  //     'title': post.title!,
+  //     'body': post.body!
+  //   });
+  //   return params;
+  // }
+
+  //HTTP parsing
+
+  static List<Post> parseApiList(String response) {
+    dynamic json = jsonDecode(response);
+    List<Post> data = List<Post>.from(json.map((x) => Post.froJson(x)));
+
+    return data;
   }
 }

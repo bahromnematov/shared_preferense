@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../model/post_model.dart';
 import '../service/http_service.dart';
 
 class ApiPage extends StatefulWidget {
@@ -10,11 +11,22 @@ class ApiPage extends StatefulWidget {
 }
 
 class _ApiPageState extends State<ApiPage> {
-  void _apiPostLIst() {
-    HttpService.GET(HttpService.API_LIST, HttpService.paramsEmpty())
-        .then((value) => {
-              print(value.toString()),
-            });
+  List<Post> items = [];
+  bool isLoading = false;
+
+  void _apiPostLIst() async {
+    setState(() {
+      isLoading = true;
+    });
+    var response =
+        await HttpService.GET(HttpService.API_LIST, HttpService.paramsEmpty());
+
+    if (response != null) {
+      setState(() {
+        isLoading = false;
+        items = HttpService.parseApiList(response);
+      });
+    }
   }
 
   @override
@@ -26,6 +38,45 @@ class _ApiPageState extends State<ApiPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (ctx, index) {
+              return itemPost(items[index]);
+            },
+          ),
+          isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SizedBox()
+        ],
+      ),
+    );
+  }
+
+  Widget itemPost(Post post) {
+    return Container(
+      padding: EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 200,
+            child: Image.network(post.url!,fit: BoxFit.cover,),
+          ),
+          Text(
+            post.id.toString(),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            post.title!,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
   }
 }

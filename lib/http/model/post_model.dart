@@ -1,17 +1,24 @@
 class Post {
-  int? userId;
+  int? albumId;
   int? id;
   String? title;
-  String? body;
+  String? url;
+  String? thumbnailUrl;
 
-  Post({this.userId, this.id, this.title, this.body});
+  Post({this.albumId, this.id, this.title, this.url, this.thumbnailUrl});
 
   Post.froJson(Map<String, dynamic> json)
-      : userId = json['userId'],
+      : albumId = json['albumId'],
         id = json['id'],
         title = json['title'],
-        body = json['body'];
+        url = json['url'],
+        thumbnailUrl = json['thumbnailUrl'];
 
-  Map<String, dynamic> toJson() =>
-      {'userId': userId, 'id': id, 'title': title, 'body': body};
+  Map<String, dynamic> toJson() => {
+        'albumId': albumId,
+        'id': id,
+        'title': title,
+        'url': url,
+        'thumbnailUrl': thumbnailUrl
+      };
 }
