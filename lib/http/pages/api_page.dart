@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../model/post_model.dart';
+import 'package:shared_preferense/http/model/emp_model.dart';
 import '../service/http_service.dart';
 
 class ApiPage extends StatefulWidget {
@@ -11,7 +10,7 @@ class ApiPage extends StatefulWidget {
 }
 
 class _ApiPageState extends State<ApiPage> {
-  List<Post> items = [];
+  List<Employee> items = [];
   bool isLoading = false;
 
   void _apiPostLIst() async {
@@ -57,24 +56,14 @@ class _ApiPageState extends State<ApiPage> {
     );
   }
 
-  Widget itemPost(Post post) {
+  Widget itemPost(Employee post) {
     return Container(
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 200,
-            child: Image.network(post.url!,fit: BoxFit.cover,),
-          ),
-          Text(
-            post.id.toString(),
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            post.title!,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
+          Text(post.name),
+          Text(post.symbol),
         ],
       ),
     );

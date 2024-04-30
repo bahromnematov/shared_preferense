@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:shared_preferense/model/user_model.dart';
-import 'package:shared_preferense/second_page.dart';
-import 'package:shared_preferense/service/secure_storage_service.dart';
-import 'package:shared_preferense/service/shared_preference.dart';
+import 'package:shared_preferense/model/albom_model.dart';
+import 'package:shared_preferense/model/todo_model.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,70 +13,103 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var nameController = TextEditingController();
+  List<ToDo> posts = [];
+  List<Albom> posts_albom = [];
 
-  name() {
-    String name = nameController.text.toString().trim();
-    SecureService.storeApiKey(name);
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-      return SecondPage();
-    }));
+  Future<List<ToDo>> getAllToDo() async {
+    final response =
+        await http.get(Uri.parse("https://jsonplaceholder.typicode.com/todos"));
+    var data = jsonDecode(response.body.toString());
+    if (response.statusCode == 200) {
+      for (var a in data) {
+        posts.add(ToDo.fromJson(a));
+      }
+      return posts;
+    } else {
+      return posts;
+    }
   }
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   nameController = TextEditingController();
-  //   var user1 = User(102, "email@gmail.com", "password");
-  //   PrefsService.storeUser(user1);
-  //   PrefsService.loadUser().then((value) => {
-  //         print(value),
-  //       });
-  //   PrefsService.removeUser();
-  //
-  //   PrefsService.storeName2("Salom");
-  //   PrefsService.storeName("Hello");
-  //   PrefsService.loadName().then((value) => {
-  //         print(value),
-  //       });
-  //
-  //   PrefsService.removeName();
-  // }
+  Future<List<Albom>> getAllAlbom() async {
+    final response =
+    await http.get(Uri.parse("https://jsonplaceholder.typicode.com/albums"));
+    var data = jsonDecode(response.body.toString());
+    if (response.statusCode == 200) {
+      for (var a in data) {
+        posts_albom.add(Albom.fromJson(a));
+      }
+      return posts_albom;
+    } else {
+      return posts_albom;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Row(
         children: [
-          Center(
-            child: Text(
-              "Ismingizni Kiriting",
-              style: TextStyle(fontSize: 30),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            height: 56,
-            decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(10)),
-            child: TextField(
-              controller: nameController,
-              decoration:
-                  InputDecoration(hintText: "Name", border: InputBorder.none),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                name();
+          Expanded(
+            child: FutureBuilder(
+              future: getAllToDo(),
+              builder: (context,snapshot){
+                if(!snapshot.hasData){
+                  return Text("Loading");
+                }else{
+                  return ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context,index){
+                      return Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(posts[index].id.toString()),
+                              Text(posts[index].title),
+                              Text(posts[index].userId.toString()),
+                              Text(posts[index].completed.toString()),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
               },
-              child: Text("Start"))
+
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: getAllAlbom(),
+              builder: (context,snapshot){
+                if(!snapshot.hasData){
+                  return Text("Loading");
+                }else{
+                  return ListView.builder(
+                    itemCount: posts_albom.length,
+                    itemBuilder: (context,index){
+                      return Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(posts_albom[index].userId.toString()),
+                              Text(posts_albom[index].title),
+                              Text(posts_albom[index].id.toString()),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+
+            ),
+          )
         ],
       ),
     );

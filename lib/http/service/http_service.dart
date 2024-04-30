@@ -1,18 +1,22 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:shared_preferense/http/model/emp_model.dart';
+import 'package:shared_preferense/http/model/emp_model.dart';
+import 'package:shared_preferense/http/model/emp_model.dart';
+import 'package:shared_preferense/http/model/emp_model.dart';
 
 import '../model/post_model.dart';
 
 class HttpService {
-  static String BASE = 'jsonplaceholder.typicode.com';
+  static String BASE = 'api.coingecko.com';
   static Map<String, String> headers = {
     'Content-type': 'application/json; charset=UTF-8'
   };
 
   // HTTPs Apis //
 
-  static String API_LIST = "/photos"; //Get
+  static String API_LIST = "/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1"; //Get
   static String API_CREATE = "/posts"; //Post
   static String API_UPDATE = "/posts/"; //id  //PUT
   static String API_DELETE = "/posts/"; //id  //Delete
@@ -82,9 +86,9 @@ class HttpService {
 
   //HTTP parsing
 
-  static List<Post> parseApiList(String response) {
+  static List<Employee> parseApiList(String response) {
     dynamic json = jsonDecode(response);
-    List<Post> data = List<Post>.from(json.map((x) => Post.froJson(x)));
+    List<Employee> data = List<Employee>.from(json.map((x) => Employee.fromJson(x)));
 
     return data;
   }
