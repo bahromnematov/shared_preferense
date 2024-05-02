@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
+import 'news_app/home_page.dart';
 import 'http/pages/api_page.dart';
 
 void main() {
