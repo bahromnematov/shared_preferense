@@ -18,7 +18,7 @@ class _TrendingPageState extends State<TrendingPage> {
 
   Future<void> getAllNews() async {
     final response = await http.get(Uri.parse(
-        "https://newsapi.org/v2/everything?q=tesla&from=2024-04-04&sortBy=publishedAt&apiKey=2eebeaa50122431cb3c2a603d3920bae"));
+        "https://newsapi.org/v2/everything?q=tesla&from=2024-04-07&sortBy=publishedAt&apiKey=2eebeaa50122431cb3c2a603d3920bae"));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       List<dynamic> articlesData = data['articles'];
